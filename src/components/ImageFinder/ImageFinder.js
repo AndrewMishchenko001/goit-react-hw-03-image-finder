@@ -1,32 +1,32 @@
-import React, { Component } from 'react';
-import { ToastContainer } from 'react-toastify';
-import Searchbar from '../Searchbar';
-import apiService from '../ApiService';
-import ImageGallery from '../ImageGallery';
-import OnLoadMoreBtnClick from '../Button';
-import LoaderSpinner from '../Loader';
-import authContext from '../Context';
-import Modal from '../Modal';
-import StartPage from '../StartPage';
+import React, { Component } from "react";
+import { ToastContainer } from "react-toastify";
+import Searchbar from "../Searchbar";
+import apiService from "../ApiService";
+import ImageGallery from "../ImageGallery";
+import OnLoadMoreBtnClick from "../Button";
+import LoaderSpinner from "../Loader";
+import authContext from "../Context";
+import Modal from "../Modal";
+import StartPage from "../StartPage";
 
 class ImageFinder extends Component {
   state = {
-    pictureName: '',
+    pictureName: "",
     picture: null,
     currentPage: 1,
     isLoading: false,
     error: null,
     gallery: [],
     isModalOpen: false,
-    selectedImgURL: '',
+    selectedImgURL: "",
 
-    handleImageClick: e => {
-      if (e.target.nodeName !== 'IMG') {
+    handleImageClick: (e) => {
+      if (e.target.nodeName !== "IMG") {
         return;
       }
 
       e.preventDefault();
-      const fullImgLink = e.target.getAttribute('data-large');
+      const fullImgLink = e.target.getAttribute("data-large");
       this.setState({
         selectedImgURL: fullImgLink,
         isModalOpen: true,
@@ -49,24 +49,24 @@ class ImageFinder extends Component {
     this.setState({ isLoading: true });
 
     apiService(pictureName, currentPage)
-      .then(images => {
-        this.setState(prevState => ({
+      .then((images) => {
+        this.setState((prevState) => ({
           gallery: [...prevState.gallery, ...images],
           currentPage: prevState.currentPage + 1,
         }));
       })
-      .catch(error => this.setState({ error }))
+      .catch((error) => this.setState({ error }))
       .finally(() => {
         this.onLoadMoreBtnClick();
         this.setState({ isLoading: false });
       });
   };
 
-  handleFormSubmit = pictureName => {
+  handleFormSubmit = (pictureName) => {
     this.setState({ pictureName });
   };
 
-  handleSubmit = query => {
+  handleSubmit = (query) => {
     if (query !== this.state.pictureName) {
       this.setState({
         gallery: [],
@@ -81,13 +81,10 @@ class ImageFinder extends Component {
     if (this.state.currentPage > 2) {
       const options = {
         top: null,
-        behavior: 'smooth',
+        behavior: "smooth",
       };
-
       options.top = window.pageYOffset + document.documentElement.clientHeight;
-      setTimeout(() => {
-        window.scrollTo(options);
-      }, 1000);
+      window.scrollTo(options);
     }
   };
 
@@ -97,7 +94,7 @@ class ImageFinder extends Component {
     });
 
     if (this.state.isModalOpen) {
-      document.body.style.overflowY = 'hidden';
+      document.body.style.overflowY = "hidden";
     }
   };
 
